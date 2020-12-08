@@ -1,31 +1,29 @@
 ﻿import kotlin.math.ceil
 
 fun main() {
-    val standardDiscount = 100
-    val increasedDiscount = 0.95
+    val increasedDiscount = 0.05
     val discountForRegularCustomer = 0.99
     val isRegularCustomer = true
-    val previousPurchase = 10001
-    val amountOfPurchases = 1000
-    var totalPrice = 0.0
+    val previousPurchase = 1001
+    val amountOfPurchases = 123321
     println("Покупка - $amountOfPurchases руб.")
-    if (previousPurchase in 1001..10000) {
-        totalPrice = (amountOfPurchases - standardDiscount).toDouble()
-        println("после применения скидки в 100 руб - ${totalPrice.toInt()} руб.")
-    } else if (previousPurchase > 10000) {
-        totalPrice = amountOfPurchases * increasedDiscount
-        if (totalPrice % 1 == 0.0) {
-            println("после применения 5% скидки - ${totalPrice.toInt()} руб.")
-        } else {
-            println("после применения 5% скидки - ${totalPrice.toInt()} руб. ${ceil(totalPrice % 1.0 * 100).toInt()} коп.")
-        }
+
+    val standardDiscount: Double = when {
+        previousPurchase in 1001..10000 -> 100.0
+        previousPurchase > 10000 -> amountOfPurchases * increasedDiscount
+        else -> 0.0
     }
+    var totalPrice = amountOfPurchases.toDouble() - standardDiscount
+    var discountString = if (standardDiscount == 100.0) "скидки в 100 рублей" else "5% скидки"
+    printMessage(discountString, totalPrice)
+
     if (isRegularCustomer) {
         totalPrice *= discountForRegularCustomer
-        if (totalPrice % 1 == 0.0) {
-            println("после применения 1% скидки - ${totalPrice.toInt()} руб.")
-        } else {
-            println("после применения 1% скидки - ${totalPrice.toInt()} руб. ${ceil(totalPrice % 1.0 * 100).toInt()} коп.")
-        }
+        discountString = "1% скидки"
+        printMessage(discountString, totalPrice)
     }
+}
+
+fun printMessage (discountString: String, totalPrice:Double) {
+    println("после применения $discountString - ${totalPrice.toInt()} руб. ${ceil(totalPrice % 1.0 * 100).toInt()} коп.")
 }
